@@ -263,6 +263,14 @@ move_log_file() {
 show_summary() {
     local backup_file="${BACKUP_DIR}/backup_${TIMESTAMP}.tar.gz"
 
+    # 构建数据库导入命令（处理密码为空的情况）
+    local mysql_cmd
+    if [ -z "$DB_USER_PASS" ]; then
+        mysql_cmd="mysql -u ${DB_USER} ${DB_NAME}"
+    else
+        mysql_cmd="mysql -u ${DB_USER} -p${DB_USER_PASS} ${DB_NAME}"
+    fi
+
     log "INFO" "========================================"
     log "INFO" "备份完成"
     log "INFO" "========================================"
